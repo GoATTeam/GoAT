@@ -1,0 +1,23 @@
+Roughtime anchor: roughtime.int08h.com
+Beginning execution at Sat May 1 19:20:01 UTC 2021
+[Roughtime] Nonce: 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: 15f2c387d1fe6c7180235b6c9b487648bf027ae3c128e6b85f6c3fcd560be74f3c5a73d7f36e41162aceca277b06aa1f6226762569d0448450a8a9bea1e4ee09
+[Roughtime] Server time: 1619896801688
+[Roughtime] Nonce: c3c5d19792243cccc3a680627ac597b1ac7e640cc4a38973d7703337dbabea4a0000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: 23df5c66b47b582dd9d6809a129161323b41f83f817b3d74de0ae775a5cf342e71ee8546203c423cdc21b6115acdb295a6aa43592653923b9013b3ffbd6a1108
+[Roughtime] Server time: 1619896801721
+CONF: anchor:roughtime.int08h.com fs:1024MB n_rounds:1 seed:5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced2 filename:FILE bs:1024 nops:100 benchmarking:0 anchor_ping:2 queue_depth:32 direct:0
+[Roughtime] Deriving from 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received 15f2c387d1fe6c7180235b6c9b487648bf027ae3c128e6b85f6c3fcd560be74f3c5a73d7f36e41162aceca277b06aa1f6226762569d0448450a8a9bea1e4ee09
+[Roughtime] Deriving from c3c5d19792243cccc3a680627ac597b1ac7e640cc4a38973d7703337dbabea4a0000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received 23df5c66b47b582dd9d6809a129161323b41f83f817b3d74de0ae775a5cf342e71ee8546203c423cdc21b6115acdb295a6aa43592653923b9013b3ffbd6a1108
+Time breakdown (averages): anchor_ping:50.547124 file_read:0.263711 hashing:0.470121
+Total time for 1 rounds is 101.828149ms
+Standard deviations: anchor_ping:19.023036 file_read:0.000000 hashing:0.000000
+[Client-side ops] mean:0.733832 sd:0.000000
+in & out anchor rand written to proofs/phase1.out
+      1 [Roughtime] Server time: 1619896801688
+      1 [Roughtime] Server time: 1619896801721
+Diff is 33
+success: 1
+RESULT: 1 in 1 tries

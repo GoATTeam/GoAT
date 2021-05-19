@@ -1,0 +1,23 @@
+Roughtime anchor: roughtime.int08h.com
+Beginning execution at Mon May 3 08:20:01 UTC 2021
+[Roughtime] Nonce: 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: 7c6bcfae5b94cda9b9490df280c249471a83be6d7d58d3acba9e264f1a99557c716bfb27f85289a7ef5c316c0f9449b74e2a4127d48de4a8789af851d9f21400
+[Roughtime] Server time: 1620030001270
+[Roughtime] Nonce: 20c45b79187d9d942d5b3fed60f590590df14e83f7266c9cd9e1353d8bdf0c6f0000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: a60175a3b527d72ec04b06b8f766ed0ea9876415c4db449751fa82da35731835143ba8d419dd93c05d21b2224d114b5b11e8ff2e2fc92caede143e15be0f2103
+[Roughtime] Server time: 1620030001304
+CONF: anchor:roughtime.int08h.com fs:1024MB n_rounds:1 seed:5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced2 filename:FILE bs:1024 nops:100 benchmarking:0 anchor_ping:2 queue_depth:32 direct:0
+[Roughtime] Deriving from 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received 7c6bcfae5b94cda9b9490df280c249471a83be6d7d58d3acba9e264f1a99557c716bfb27f85289a7ef5c316c0f9449b74e2a4127d48de4a8789af851d9f21400
+[Roughtime] Deriving from 20c45b79187d9d942d5b3fed60f590590df14e83f7266c9cd9e1353d8bdf0c6f0000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received a60175a3b527d72ec04b06b8f766ed0ea9876415c4db449751fa82da35731835143ba8d419dd93c05d21b2224d114b5b11e8ff2e2fc92caede143e15be0f2103
+Time breakdown (averages): anchor_ping:48.368025 file_read:0.261326 hashing:0.470315
+Total time for 1 rounds is 97.467807ms
+Standard deviations: anchor_ping:16.141290 file_read:0.000000 hashing:0.000000
+[Client-side ops] mean:0.731641 sd:0.000000
+in & out anchor rand written to proofs/phase1.out
+      1 [Roughtime] Server time: 1620030001270
+      1 [Roughtime] Server time: 1620030001304
+Diff is 34
+success: 1
+RESULT: 1 in 1 tries

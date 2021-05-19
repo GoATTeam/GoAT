@@ -1,0 +1,23 @@
+Roughtime anchor: roughtime.chainpoint.org
+Beginning execution at Sun May 2 00:40:01 UTC 2021
+[Roughtime] Nonce: 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: b533e44e8ac9f4e2568370ce7c4046d9916cbc59d56bffb1d39cfd45b351e995271f57c7bff5febc2599f8e694db5e7fd45488017ab937287f3c1555a249de05
+[Roughtime] Server time: 1619916001051
+[Roughtime] Nonce: 9391bcb62dbdf92db43ba84f459af2b76659743e0d6e3e4987f9e4c350810dad0000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: e8a12b978db22ce0b68aa270f8775583eec9679291a5bbbc2140c907badf528a6b9052c0125902278b0f5efba6298910a32f3b29c535916672c6afe728c20207
+[Roughtime] Server time: 1619916001055
+CONF: anchor:roughtime.chainpoint.org fs:1024MB n_rounds:1 seed:5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced2 filename:FILE bs:1024 nops:100 benchmarking:0 anchor_ping:2 queue_depth:32 direct:0
+[Roughtime] Deriving from 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received b533e44e8ac9f4e2568370ce7c4046d9916cbc59d56bffb1d39cfd45b351e995271f57c7bff5febc2599f8e694db5e7fd45488017ab937287f3c1555a249de05
+[Roughtime] Deriving from 9391bcb62dbdf92db43ba84f459af2b76659743e0d6e3e4987f9e4c350810dad0000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received e8a12b978db22ce0b68aa270f8775583eec9679291a5bbbc2140c907badf528a6b9052c0125902278b0f5efba6298910a32f3b29c535916672c6afe728c20207
+Time breakdown (averages): anchor_ping:7.500522 file_read:0.253661 hashing:0.471205
+Total time for 1 rounds is 15.725983ms
+Standard deviations: anchor_ping:3.844647 file_read:0.000000 hashing:0.000000
+[Client-side ops] mean:0.724866 sd:0.000000
+in & out anchor rand written to proofs/phase1.out
+      1 [Roughtime] Server time: 1619916001051
+      1 [Roughtime] Server time: 1619916001055
+Diff is 4
+success: 1
+RESULT: 1 in 1 tries

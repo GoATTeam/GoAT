@@ -1,0 +1,18 @@
+**/.ipynb_checkpoints
+.vscode
+
+**/build
+
+# Merkle-Tree PoR
+FILE
+TAG
+proofs
+**/*.o
+PROOF*
+*.tmp
+
+# Python
+venv
+
+# IP2Location
+data/ip2location_db5/IP2LOCATION-LITE-DB5.*

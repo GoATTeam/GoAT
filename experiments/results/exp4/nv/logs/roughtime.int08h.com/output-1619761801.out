@@ -1,0 +1,23 @@
+Roughtime anchor: roughtime.int08h.com
+Beginning execution at Fri Apr 30 05:50:01 UTC 2021
+[Roughtime] Nonce: 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: 1a4618bc734f40f0f239cbb7196ba59590a9e4b19df8b5e688e0e44e4aea782e603b4aadec64c1f1834b872f2771739f0a1a1cefc2b431f6955999b204c5de00
+[Roughtime] Server time: 1619761801575
+[Roughtime] Nonce: 08ca2f6bfe15ea3e01c4bcf98fa07c08b4567090cd6ba6d1fd3dd6a566d761c20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: 396e65053d736b72a1121fd66c3392769600a68606ab82fa0c80c3c9d9722e095e1dcc4f59df5c630403d6c00d70f37a53029c7ac4f25c13b1dfdef5ffff2800
+[Roughtime] Server time: 1619761801608
+CONF: anchor:roughtime.int08h.com fs:1024MB n_rounds:1 seed:5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced2 filename:FILE bs:1024 nops:100 benchmarking:0 anchor_ping:2 queue_depth:32 direct:0
+[Roughtime] Deriving from 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received 1a4618bc734f40f0f239cbb7196ba59590a9e4b19df8b5e688e0e44e4aea782e603b4aadec64c1f1834b872f2771739f0a1a1cefc2b431f6955999b204c5de00
+[Roughtime] Deriving from 08ca2f6bfe15ea3e01c4bcf98fa07c08b4567090cd6ba6d1fd3dd6a566d761c20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received 396e65053d736b72a1121fd66c3392769600a68606ab82fa0c80c3c9d9722e095e1dcc4f59df5c630403d6c00d70f37a53029c7ac4f25c13b1dfdef5ffff2800
+Time breakdown (averages): anchor_ping:53.229763 file_read:0.262860 hashing:0.471785
+Total time for 1 rounds is 107.194291ms
+Standard deviations: anchor_ping:21.306308 file_read:0.000000 hashing:0.000000
+[Client-side ops] mean:0.734645 sd:0.000000
+in & out anchor rand written to proofs/phase1.out
+      1 [Roughtime] Server time: 1619761801575
+      1 [Roughtime] Server time: 1619761801608
+Diff is 33
+success: 1
+RESULT: 1 in 1 tries

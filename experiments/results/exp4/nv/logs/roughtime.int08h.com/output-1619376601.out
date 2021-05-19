@@ -1,0 +1,23 @@
+Roughtime anchor: roughtime.int08h.com
+Beginning execution at Sun Apr 25 18:50:01 UTC 2021
+[Roughtime] Nonce: 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: 094a3fc110ca63c0d843d80730feffe86354fb1ce945268cd6d5b94e9a6109885790d785c523f3735cc9bc44aae9de914f6c89ac1dea118463ffadb2ad16a702
+[Roughtime] Server time: 1619376602087
+[Roughtime] Nonce: 53e8491abde911253c7bac32e775c6bbf67fbcdfb914092b557c1c28957e198f0000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: b46c38ec89622ed4c07d62bb21b22c34743ae8488ee0d7f2c45c53fa13b1d108c71b877c2a3a9c6f4e9f6e62bb2809024647fc20c2d0290e7fdfd29d4821570b
+[Roughtime] Server time: 1619376602121
+CONF: anchor:roughtime.int08h.com fs:1024MB n_rounds:1 seed:5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced2 filename:FILE bs:1024 nops:100 benchmarking:0 anchor_ping:2 queue_depth:32 direct:0
+[Roughtime] Deriving from 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received 094a3fc110ca63c0d843d80730feffe86354fb1ce945268cd6d5b94e9a6109885790d785c523f3735cc9bc44aae9de914f6c89ac1dea118463ffadb2ad16a702
+[Roughtime] Deriving from 53e8491abde911253c7bac32e775c6bbf67fbcdfb914092b557c1c28957e198f0000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received b46c38ec89622ed4c07d62bb21b22c34743ae8488ee0d7f2c45c53fa13b1d108c71b877c2a3a9c6f4e9f6e62bb2809024647fc20c2d0290e7fdfd29d4821570b
+Time breakdown (averages): anchor_ping:477.077634 file_read:0.268055 hashing:0.469635
+Total time for 1 rounds is 954.893026ms
+Standard deviations: anchor_ping:444.420998 file_read:0.000000 hashing:0.000000
+[Client-side ops] mean:0.737690 sd:0.000000
+in & out anchor rand written to proofs/phase1.out
+      1 [Roughtime] Server time: 1619376602087
+      1 [Roughtime] Server time: 1619376602121
+Diff is 34
+success: 1
+RESULT: 1 in 1 tries

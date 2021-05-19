@@ -1,0 +1,23 @@
+Roughtime anchor: roughtime.sandbox.google.com
+Beginning execution at Sun May 2 22:45:01 UTC 2021
+[Roughtime] Nonce: 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: 31dda4a22e8736595c4bb4e8024e0b98d4ec823ed4f8498cb7a8e8a259e0ffbb265f536c5763e086f32e6cff97aa608753fbe0fc0c9481e1fc08c7229abeba0c
+[Roughtime] Server time: 1619995501945
+[Roughtime] Nonce: 41376582816c83dc61f65f35b0e5f4beb54010889fb0df24cf68ba559bdf9e3e0000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: 7ee7d8d6a2fdf472ebdd4061569052b68889d1a0f1d3cfb0f352ab0016ab57b896c26a814c52f22c9fc9f2aab30abcfb7b26b7843feebdb99b186b44cc44120a
+[Roughtime] Server time: 1619995501957
+CONF: anchor:roughtime.sandbox.google.com fs:1024MB n_rounds:1 seed:5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced2 filename:FILE bs:1024 nops:100 benchmarking:0 anchor_ping:2 queue_depth:32 direct:0
+[Roughtime] Deriving from 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received 31dda4a22e8736595c4bb4e8024e0b98d4ec823ed4f8498cb7a8e8a259e0ffbb265f536c5763e086f32e6cff97aa608753fbe0fc0c9481e1fc08c7229abeba0c
+[Roughtime] Deriving from 41376582816c83dc61f65f35b0e5f4beb54010889fb0df24cf68ba559bdf9e3e0000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received 7ee7d8d6a2fdf472ebdd4061569052b68889d1a0f1d3cfb0f352ab0016ab57b896c26a814c52f22c9fc9f2aab30abcfb7b26b7843feebdb99b186b44cc44120a
+Time breakdown (averages): anchor_ping:12.322993 file_read:0.263741 hashing:0.483431
+Total time for 1 rounds is 25.393225ms
+Standard deviations: anchor_ping:1.655320 file_read:0.000000 hashing:0.000000
+[Client-side ops] mean:0.747172 sd:0.000000
+in & out anchor rand written to proofs/phase1.out
+      1 [Roughtime] Server time: 1619995501945
+      1 [Roughtime] Server time: 1619995501957
+Diff is 12
+success: 1
+RESULT: 1 in 1 tries

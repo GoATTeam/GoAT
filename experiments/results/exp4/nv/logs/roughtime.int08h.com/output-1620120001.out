@@ -1,0 +1,24 @@
+Roughtime anchor: roughtime.int08h.com
+Beginning execution at Tue May 4 09:20:01 UTC 2021
+rm: cannot remove 'rt_sig.tmp': No such file or directory
+[Roughtime] Nonce: 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: d4a4e386e65874fe657bf362a67e09e0aacfb7c20a26eb0cfb4bc33ae00053a25ac953d77e114892d2720a5fff49376f6f0f825b4739b552e79c3db7a9c9560b
+[Roughtime] Server time: 1620120001744
+[Roughtime] Nonce: db6646bd213afdf9f88e10cff7c27f27f4992c1ea1a777ad54aecd5f993041a60000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: 294265b7b64e2ecad65ed454ba136aa2f40128e5750a93d4ea2821489969ac8130e86c03a8d2514ecc98de8d79498905481bc6ddf156e2990084b0da7171b00b
+[Roughtime] Server time: 1620120001777
+CONF: anchor:roughtime.int08h.com fs:1024MB n_rounds:1 seed:5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced2 filename:FILE bs:1024 nops:100 benchmarking:0 anchor_ping:2 queue_depth:32 direct:0
+[Roughtime] Deriving from 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received d4a4e386e65874fe657bf362a67e09e0aacfb7c20a26eb0cfb4bc33ae00053a25ac953d77e114892d2720a5fff49376f6f0f825b4739b552e79c3db7a9c9560b
+[Roughtime] Deriving from db6646bd213afdf9f88e10cff7c27f27f4992c1ea1a777ad54aecd5f993041a60000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received 294265b7b64e2ecad65ed454ba136aa2f40128e5750a93d4ea2821489969ac8130e86c03a8d2514ecc98de8d79498905481bc6ddf156e2990084b0da7171b00b
+Time breakdown (averages): anchor_ping:34.013177 file_read:0.268386 hashing:0.472425
+Total time for 1 rounds is 68.767237ms
+Standard deviations: anchor_ping:2.199407 file_read:0.000000 hashing:0.000000
+[Client-side ops] mean:0.740811 sd:0.000000
+in & out anchor rand written to proofs/phase1.out
+      1 [Roughtime] Server time: 1620120001744
+      1 [Roughtime] Server time: 1620120001777
+Diff is 33
+success: 1
+RESULT: 1 in 1 tries

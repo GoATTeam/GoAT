@@ -1,0 +1,23 @@
+Roughtime anchor: roughtime.sandbox.google.com
+Beginning execution at Fri Apr 30 16:45:01 UTC 2021
+[Roughtime] Nonce: 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: 453d245ee454695b9f00b7f78a44fbe484ab7968fc3c46838d8ffbc927df42a1bdb05b29f201fee9df6714e9e85d5108de80d02c14d6a183636490218842610e
+[Roughtime] Server time: 1619801101843
+[Roughtime] Nonce: 683c14719bb9675244dde59db0103e40c1e4043917ae6b737bdef83a97a1bad40000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: 12f895737fd53cc328b43bcd5d7e024ec83f98af6bfff656f04b06eba5c946d24eecde42595f93566a4a2222d42f1d93652be63944b34bae712d15668e0e6403
+[Roughtime] Server time: 1619801101854
+CONF: anchor:roughtime.sandbox.google.com fs:1024MB n_rounds:1 seed:5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced2 filename:FILE bs:1024 nops:100 benchmarking:0 anchor_ping:2 queue_depth:32 direct:0
+[Roughtime] Deriving from 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received 453d245ee454695b9f00b7f78a44fbe484ab7968fc3c46838d8ffbc927df42a1bdb05b29f201fee9df6714e9e85d5108de80d02c14d6a183636490218842610e
+[Roughtime] Deriving from 683c14719bb9675244dde59db0103e40c1e4043917ae6b737bdef83a97a1bad40000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received 12f895737fd53cc328b43bcd5d7e024ec83f98af6bfff656f04b06eba5c946d24eecde42595f93566a4a2222d42f1d93652be63944b34bae712d15668e0e6403
+Time breakdown (averages): anchor_ping:15.285035 file_read:0.254902 hashing:0.470557
+Total time for 1 rounds is 31.295595ms
+Standard deviations: anchor_ping:4.720416 file_read:0.000000 hashing:0.000000
+[Client-side ops] mean:0.725459 sd:0.000000
+in & out anchor rand written to proofs/phase1.out
+      1 [Roughtime] Server time: 1619801101843
+      1 [Roughtime] Server time: 1619801101854
+Diff is 11
+success: 1
+RESULT: 1 in 1 tries

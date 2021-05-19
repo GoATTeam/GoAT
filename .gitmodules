@@ -1,0 +1,3 @@
+[submodule "roughenough-geo"]
+	path = deps/roughenough
+	url = git@github.com:mskd12/roughenough.git

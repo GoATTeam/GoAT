@@ -1,0 +1,44 @@
+Roughtime anchor: roughtime.sandbox.google.com
+Beginning execution at Thu Apr 29 19:15:01 UTC 2021
+[Roughtime] Nonce: 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: fc9578df8665dbee5ad0d81c00768cb33dc025cad0a6033981aa0d0b58b4f16f2d4af27221c378ded6e3dff5023a7316e0135460087dc9a1372c04dc9a38dc0d
+[Roughtime] Server time: 1619723701116
+[Roughtime] Nonce: 16e5bb35f1525e50f5f04c8a0717159c966f4ce5ae064eb643c85ae3251555430000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: d227c436af9afa00c57b95d72ed91e6062b62670850f2fce292b524021db9a2284bdaef220a96d92cbf75ecf994c9dbc7809a36ecb637a74ac335661483e170a
+[Roughtime] Server time: 1619723701146
+CONF: anchor:roughtime.sandbox.google.com fs:1024MB n_rounds:1 seed:5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced2 filename:FILE bs:1024 nops:100 benchmarking:0 anchor_ping:2 queue_depth:32 direct:0
+[Roughtime] Deriving from 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received fc9578df8665dbee5ad0d81c00768cb33dc025cad0a6033981aa0d0b58b4f16f2d4af27221c378ded6e3dff5023a7316e0135460087dc9a1372c04dc9a38dc0d
+[Roughtime] Deriving from 16e5bb35f1525e50f5f04c8a0717159c966f4ce5ae064eb643c85ae3251555430000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received d227c436af9afa00c57b95d72ed91e6062b62670850f2fce292b524021db9a2284bdaef220a96d92cbf75ecf994c9dbc7809a36ecb637a74ac335661483e170a
+Time breakdown (averages): anchor_ping:26.683118 file_read:0.263410 hashing:0.470655
+Total time for 1 rounds is 54.100395ms
+Standard deviations: anchor_ping:2.909207 file_read:0.000000 hashing:0.000000
+[Client-side ops] mean:0.734065 sd:0.000000
+in & out anchor rand written to proofs/phase1.out
+      1 [Roughtime] Server time: 1619723701116
+      1 [Roughtime] Server time: 1619723701146
+Diff is 30
+success: 0
+Sleeping before retrying
+[Roughtime] Nonce: 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: 331331a7ec438d29a5ddf0149f801828a6347f39da8973c9b16df6bfacd2eea9748d14767fb0ae6fc8a2d579e0161a4ed253c47052918480e2102fd91844050b
+[Roughtime] Server time: 1619723702240
+[Roughtime] Nonce: b925bf3688d62a037fe84d3934de8e79124ba81c7406fe5cc07518d0bfdd9a070000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: 76f136ba3a3ccca3f3e9496d86196240e7587551bfb80cea4568c4844413ff42559d1d5cce0b63880b9f8ef0ead896c8c680e3688c05163ed9fc908d11ff1601
+[Roughtime] Server time: 1619723702252
+CONF: anchor:roughtime.sandbox.google.com fs:1024MB n_rounds:1 seed:5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced2 filename:FILE bs:1024 nops:100 benchmarking:0 anchor_ping:2 queue_depth:32 direct:0
+[Roughtime] Deriving from 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received 331331a7ec438d29a5ddf0149f801828a6347f39da8973c9b16df6bfacd2eea9748d14767fb0ae6fc8a2d579e0161a4ed253c47052918480e2102fd91844050b
+[Roughtime] Deriving from b925bf3688d62a037fe84d3934de8e79124ba81c7406fe5cc07518d0bfdd9a070000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received 76f136ba3a3ccca3f3e9496d86196240e7587551bfb80cea4568c4844413ff42559d1d5cce0b63880b9f8ef0ead896c8c680e3688c05163ed9fc908d11ff1601
+Time breakdown (averages): anchor_ping:11.084812 file_read:0.275545 hashing:0.471035
+Total time for 1 rounds is 22.916331ms
+Standard deviations: anchor_ping:0.203674 file_read:0.000000 hashing:0.000000
+[Client-side ops] mean:0.746580 sd:0.000000
+in & out anchor rand written to proofs/phase1.out
+      1 [Roughtime] Server time: 1619723702240
+      1 [Roughtime] Server time: 1619723702252
+Diff is 12
+success: 1
+RESULT: 1 in 2 tries

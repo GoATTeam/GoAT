@@ -1,0 +1,13 @@
+=== ./gen_proof_comm 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced0 ===
+
+Seed: 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced0, num_blocks: 2048, file_size: 2MB, chals: 100
+Com1: e82ccaf009839f465e950c52bfabdd56012ad3db5a29e5d029814dc99d2dbdf4
+Time breakdown: 1.852000 2.026000 3.878000
+
+=== ./gen_proof_full 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced0 ===
+Seed: 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced0, num_blocks: 2048, file_size: 2MB, chals: 100
+Total num seeks: 1002
+H(root): dcac6ac0dc6ecba13dcf463d7b6af8abb1a4d52eb02ad776ab1c38b27bb62759
+Hash(proof): 1bde165c43e3aaf4dbee05a6bd1ffd42c059cbddb576c5d532c5b01d7a6a1275
+Time breakdown: 7.139000 10.394000 3.948000 21.487000
+Creating PROOF...	Done

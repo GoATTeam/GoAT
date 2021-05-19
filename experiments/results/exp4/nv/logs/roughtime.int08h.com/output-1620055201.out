@@ -1,0 +1,23 @@
+Roughtime anchor: roughtime.int08h.com
+Beginning execution at Mon May 3 15:20:01 UTC 2021
+[Roughtime] Nonce: 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: daf4ad292c5844e9119dcd4adb6ec80c5aa7127ede9d2dab8c225fe67bcd6c77d86875c902a2032647490efb5ccc24cf2aa135393fca1a8e46101d3436f4130c
+[Roughtime] Server time: 1620055201495
+[Roughtime] Nonce: d715a58200bd9d40d3315357d8b2563173ee5bb157674ec8b8651ae313a5549e0000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: 3981cce63724a2e504e41762ba3e7d88d90e4ae6c3bb893735d3ba998be075ca20200661b2cf86ce244ade8363c922edb412322f1ecaecc8146c8fb92b480208
+[Roughtime] Server time: 1620055201527
+CONF: anchor:roughtime.int08h.com fs:1024MB n_rounds:1 seed:5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced2 filename:FILE bs:1024 nops:100 benchmarking:0 anchor_ping:2 queue_depth:32 direct:0
+[Roughtime] Deriving from 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received daf4ad292c5844e9119dcd4adb6ec80c5aa7127ede9d2dab8c225fe67bcd6c77d86875c902a2032647490efb5ccc24cf2aa135393fca1a8e46101d3436f4130c
+[Roughtime] Deriving from d715a58200bd9d40d3315357d8b2563173ee5bb157674ec8b8651ae313a5549e0000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received 3981cce63724a2e504e41762ba3e7d88d90e4ae6c3bb893735d3ba998be075ca20200661b2cf86ce244ade8363c922edb412322f1ecaecc8146c8fb92b480208
+Time breakdown (averages): anchor_ping:35.975992 file_read:0.271501 hashing:0.469827
+Total time for 1 rounds is 72.693378ms
+Standard deviations: anchor_ping:4.698399 file_read:0.000000 hashing:0.000000
+[Client-side ops] mean:0.741328 sd:0.000000
+in & out anchor rand written to proofs/phase1.out
+      1 [Roughtime] Server time: 1620055201495
+      1 [Roughtime] Server time: 1620055201527
+Diff is 32
+success: 1
+RESULT: 1 in 1 tries

@@ -1,0 +1,44 @@
+Roughtime anchor: roughtime.chainpoint.org
+Beginning execution at Sun May 2 10:10:01 UTC 2021
+[Roughtime] Nonce: 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: 44caf5676c0901d0c2fcae0dc521eb4684062ebfea3e881cb10b097d3660298887a161d44ec02b00be0e6f4fecc6655d617d376c46f6f5ca7440cd7010a0c806
+[Roughtime] Server time: 1619950201862
+[Roughtime] Nonce: fadeb0f0667b25cd16f4dd95800c5967e5e74644b20fd83f1c6971bb7ac3f3180000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: 750be884ebba2f267897baf45bb00e9937a65a1307411ea23d87fa875b44e4f14dec46fe73122af16034556b916033186024ae41b828a5c429a0e64a3080b40c
+[Roughtime] Server time: 1619950201876
+CONF: anchor:roughtime.chainpoint.org fs:1024MB n_rounds:1 seed:5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced2 filename:FILE bs:1024 nops:100 benchmarking:0 anchor_ping:2 queue_depth:32 direct:0
+[Roughtime] Deriving from 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received 44caf5676c0901d0c2fcae0dc521eb4684062ebfea3e881cb10b097d3660298887a161d44ec02b00be0e6f4fecc6655d617d376c46f6f5ca7440cd7010a0c806
+[Roughtime] Deriving from fadeb0f0667b25cd16f4dd95800c5967e5e74644b20fd83f1c6971bb7ac3f3180000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received 750be884ebba2f267897baf45bb00e9937a65a1307411ea23d87fa875b44e4f14dec46fe73122af16034556b916033186024ae41b828a5c429a0e64a3080b40c
+Time breakdown (averages): anchor_ping:11.090950 file_read:0.258961 hashing:0.470196
+Total time for 1 rounds is 22.911158ms
+Standard deviations: anchor_ping:1.458319 file_read:0.000000 hashing:0.000000
+[Client-side ops] mean:0.729157 sd:0.000000
+in & out anchor rand written to proofs/phase1.out
+      1 [Roughtime] Server time: 1619950201862
+      1 [Roughtime] Server time: 1619950201876
+Diff is 14
+success: 0
+Sleeping before retrying
+[Roughtime] Nonce: 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: a773542444ec17123387ee02cc165375073e00011e1caa65227c64dff80dfa1ed9c965a534edf33a81e56179ded2d683a32e9af080a51c6aa449ea8bc4d22c00
+[Roughtime] Server time: 1619950202939
+[Roughtime] Nonce: a3c2f9175142aea8e8a62a01adb358f6a5e5aa0473f7b9e0b91d569634762c210000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Sign: 265ddf9c3f77cd9e2e0a5f200569a3ca9797046cb0e1e671bfb2c01d6565190d0f809c2bddde44a7404b8383f0cbd689281b1b47b20c5f52d4555f1f8e09af0b
+[Roughtime] Server time: 1619950202943
+CONF: anchor:roughtime.chainpoint.org fs:1024MB n_rounds:1 seed:5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced2 filename:FILE bs:1024 nops:100 benchmarking:0 anchor_ping:2 queue_depth:32 direct:0
+[Roughtime] Deriving from 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced20000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received a773542444ec17123387ee02cc165375073e00011e1caa65227c64dff80dfa1ed9c965a534edf33a81e56179ded2d683a32e9af080a51c6aa449ea8bc4d22c00
+[Roughtime] Deriving from a3c2f9175142aea8e8a62a01adb358f6a5e5aa0473f7b9e0b91d569634762c210000000000000000000000000000000000000000000000000000000000000000
+[Roughtime] Received 265ddf9c3f77cd9e2e0a5f200569a3ca9797046cb0e1e671bfb2c01d6565190d0f809c2bddde44a7404b8383f0cbd689281b1b47b20c5f52d4555f1f8e09af0b
+Time breakdown (averages): anchor_ping:3.443523 file_read:0.255192 hashing:0.470017
+Total time for 1 rounds is 7.613161ms
+Standard deviations: anchor_ping:0.140432 file_read:0.000000 hashing:0.000000
+[Client-side ops] mean:0.725209 sd:0.000000
+in & out anchor rand written to proofs/phase1.out
+      1 [Roughtime] Server time: 1619950202939
+      1 [Roughtime] Server time: 1619950202943
+Diff is 4
+success: 1
+RESULT: 1 in 2 tries
