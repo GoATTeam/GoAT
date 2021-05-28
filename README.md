@@ -8,7 +8,7 @@
 
 GoAT is a file geolocation protocol (formally a Proof of Geo-Retrievability scheme). Using GoAT, you can prove that a particular piece of data is stored within a geographic region. GoAT targets somewhat coarse geolocation radii, useful to prove file replication. For example, GoAT can used to prove that three replicas of a file *F* are stored in USA, Asia and Europe respectively. Unlike existing geolocation systems that rely on trusted-verifiers, GoAT uses *existing internet servers* as geolocation anchors, thereby decentralizing trust over a large fraction of the internet.
 
-- For more information, please have a look at our paper.
+- For more information, please have a look at our [paper](https://eprint.iacr.org/2021/697).
 
 - Two PoRets have been implemented: `Shacham-Waters` and `Merkle-Tree`. Please look at the corresponding folders for how to install and run.
 
