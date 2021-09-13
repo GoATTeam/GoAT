@@ -1,8 +1,12 @@
 # Shacham-Waters PoRet
 
-> Install script at ../scripts/install/install-pbc.sh
+Installation instructions:
 
-The default curve is `g149.param`. Some other curves copied from PBC libary can be found inside the `param` folder. 
+> sudo apt install gcc make libsodium-dev
+> bash scripts/install/install-pbc.sh
+> bash scripts/install/install-roughtime.sh (Optional. Needed only if a Roughtime anchor is being used.) 
+
+The default curve used in GoAT is `g149.param`. Some other curves copied from PBC libary can be found inside the `param` folder. 
 
 Most binaries provide a list of command-line options with the `-h` flag.
 
@@ -10,7 +14,7 @@ Most binaries provide a list of command-line options with the `-h` flag.
 2. `./commit`: Runs the `GeoCommit` protocol. Anchor name, amplification factor can be specified. Output written to `proofs/phase1.out`.
 3. `./prove_and_verify`: Runs both the `Prove` and `Verify` protocols using information in `proofs/phase1.out`.
 
-## Notes
+## Implementation Notes
 
 1. Note that the code to support PoRet proof aggregation over multiple geo-commit instances is not currently implemented, although it should be trivial to do so
 
