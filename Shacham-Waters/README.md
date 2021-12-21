@@ -3,7 +3,9 @@
 Installation instructions:
 
 > sudo apt install gcc make libsodium-dev
+
 > bash scripts/install/install-pbc.sh
+
 > bash scripts/install/install-roughtime.sh (Optional. Needed only if a Roughtime anchor is being used.) 
 
 The default curve used in GoAT is `g149.param`. Some other curves copied from PBC libary can be found inside the `param` folder. 
