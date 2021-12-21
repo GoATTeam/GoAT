@@ -2,7 +2,7 @@
 
 #include <pbc/pbc.h>
 
-#define DEFAULT_PARAM_FILE "./param/g149.param"
+#define DEFAULT_PARAM_FILE "./param/f.param"
 
 /*
 Copied from pbc

@@ -225,7 +225,7 @@ static inline void pbc_demo_pairing_init(pairing_t pairing, int argc, char **arg
     if (!fp) pbc_die("error opening %s", argv[1]);
   } else {
     printf("No input given. Choosing the default type f curve\n");
-    fp = fopen("../other/SW-Ref/deps/pbc-0.5.14/param/f.param", "r");
+    fp = fopen("../Shacham-Waters/param/f.param", "r");
     if (!fp) pbc_die("error opening %s", argv[1]);
   }
   size_t count = fread(s, 1, 16384, fp);
