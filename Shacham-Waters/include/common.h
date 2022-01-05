@@ -19,5 +19,8 @@
 #define DEFAULT_P1_OUT "proofs/phase1.out"
 #define DEFAULT_P2_OUT "proofs/phase2.out"
 
+#define G1_LEN_COMPRESSED 49
+#define G2_LEN_COMPRESSED 97
+
 #define TLS_1_2_ANCHOR 1
 #define ROUGHTIME_ANCHOR 2

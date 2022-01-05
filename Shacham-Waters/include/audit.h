@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-#include <pbc/pbc.h>
+#include <relic.h>
 #include <sodium.h>
 
 #include "common.h"
@@ -13,29 +13,27 @@
 struct query_t {
     int query_length;
     uint32_t *indices;
-    struct element_s *v;
+    bn_t *v;
 };
 
 struct query_response_t {
     int mu_vec_length;
-    struct element_s *mu_vec;
-    element_t sigma;
+    bn_t *mu_vec;
+    g1_t sigma;
 };
 
 struct response_comm_t {
     int mu_vec_length;
-    struct element_s *mu_vec;
-    element_t vector_com;
+    bn_t *mu_vec;
+    g1_t vector_com;
 };
 
 // Init
 struct query_t* init_query_t(
-    int num_challenges, 
-    struct pairing_s* pairing
+    int num_challenges
 );
 struct response_comm_t* init_response_comm_t(
-    int num_sectors,
-    struct pairing_s* pairing
+    int num_sectors
 );
 
 // Free
@@ -51,25 +49,26 @@ void generate_query_random(
 void generate_query_deterministic(
     struct query_t* query,
     int num_blocks,
-    const unsigned char seed[randombytes_SEEDBYTES]
+    unsigned char seed[randombytes_SEEDBYTES]
 );
 
 // SWPoRet.Prove
 struct query_response_t* query_with_selected_blocks(
     struct query_t* query, 
-    struct file_block_t** selected, 
-    struct pairing_s* pairing
+    struct file_block_t** selected
 );
 struct query_response_t* query_with_full_file(
     struct query_t* query, 
-    struct file_t* file_info, 
-    struct pairing_s* pairing
+    struct file_t* file_info
 );
 
 // SWPoRet.verify
 int verify(struct query_t* query,
            struct query_response_t* response,
            struct public_key_t* pk);
+
+// Utility to generate a rand bn number
+void bn_rand_util(bn_t* p);
 
 // SWPoRet.commit (parallel)
 void threaded_swcommit_init(

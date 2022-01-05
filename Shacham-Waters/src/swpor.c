@@ -6,6 +6,8 @@
 #include "utils.h"
 
 int main() {
+    relic_pairing_init();
+
     struct file_t* file_info = read_file(DEFAULT_DATA_FILE, NUM_BLOCKS, NUM_SECTORS, SS);
     printf("File read successfully!\n");
 
@@ -19,17 +21,14 @@ int main() {
     }
     printf("Public key read successfully!\n");
 
-    struct pairing_s* pairing = pk->params->pairing;
-    if (! pairing) {
-        printf("Error\n");
-        exit(0);
-    }
-
-    struct query_t* Q = init_query_t(NUM_CHAL, pairing);
+    struct query_t* Q = init_query_t(NUM_CHAL);
+    //unsigned char seed[32];
+    //hex64_to_bytes("5c9f4bf9b2c15bb815f82faedc5a52fc3cb2dfa83c3ba3cf1b270f31fa0cced2", seed);
+    //generate_query_deterministic(Q, NUM_BLOCKS, seed);
     generate_query_random(Q, NUM_BLOCKS);
     printf("Query indices generated!\n");
 
-    struct query_response_t* R = query_with_full_file(Q, file_info, pairing);
+    struct query_response_t* R = query_with_full_file(Q, file_info);
     printf("Query response computed!\n");
 
     if (verify(Q, R, pk)) {

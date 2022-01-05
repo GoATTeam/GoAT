@@ -1,6 +1,7 @@
 #pragma once
 
-#include <pbc/pbc.h>
+#include <relic.h>
+
 
 struct file_sector_t {
     size_t index;
@@ -12,7 +13,7 @@ struct file_block_t {
     size_t index;
     struct file_sector_t *sectors;
     uint32_t num_sectors;
-    element_t sigma; // tag
+    g1_t sigma; // tag
 };
 
 struct file_t {

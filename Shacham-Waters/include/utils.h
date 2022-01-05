@@ -1,29 +1,36 @@
 #pragma once
 
-#include <pbc/pbc.h>
+#include "relic.h"
+#include "common.h"
 
-#define DEFAULT_PARAM_FILE "./param/f.param"
+static inline void relic_pairing_init() {
+        if (core_init() != RLC_OK) {
+                core_clean();
+        }
+        conf_print();
 
-/*
-Copied from pbc
+        if (pc_param_set_any() != RLC_OK) {
+                // RLC_THROW(ERR_NO_CURVE);
+                printf("Exiting\n");
+                core_clean();
+        }
 
-Initializes pairing from file specified as first argument, or from standard
-input if there is no first argument.
-*/
-static inline void pbc_pairing_init(pairing_t pairing) {
-    char s[16384];
-    FILE *fp;
-
-    char* filename = DEFAULT_PARAM_FILE;
-    // printf("Initializing with %s\n", filename);
-    fp = fopen(filename, "r");
-    if (!fp) pbc_die("error opening %s", filename);
-
-    size_t count = fread(s, 1, 16384, fp);
-    if (!count) pbc_die("input error");
-    fclose(fp);
-
-    if (pairing_init_set_buf(pairing, s, count)) pbc_die("pairing init failed");
+	// Do some checks
+	g1_t p;
+	g1_new(p);
+	int len = g1_size_bin(p, 1);
+	if(len != G1_LEN_COMPRESSED) {
+		printf("set g1_len to %d", len);
+	}
+	g1_free(p);
+	
+	g2_t q;
+	g2_new(q);
+	len = g2_size_bin(q, 1);
+	if(len != G2_LEN_COMPRESSED) {
+		printf("set g2_len to %d", len);
+	}
+	g2_free(q);
 }
 
 /*
@@ -35,20 +42,19 @@ static inline double timediff(struct timespec* t0, struct timespec* t1) {
 }
 
 struct common_t {
-    struct pairing_s* pairing;
-    element_t g;
-    struct element_s *u_vec;
+    g2_t g;
+    g1_t *u_vec;
     uint32_t u_size;
 };
 
 struct public_key_t {
     struct common_t *params;
-    element_t v;  // v = g^alpha
+    g2_t v;  // v = g^alpha
 };
 
 struct private_key_t {
     struct common_t *params;
-    element_t alpha;
+    bn_t alpha;
 };
 
 struct keypair_t {
@@ -62,7 +68,7 @@ struct resp {
 
 struct keypair_t* generate_key_pair(int public_params_size);
 
-void bls_hash_int(uint32_t, struct element_s*, pairing_t);
+void bls_hash_int(uint32_t, ec_t*);
 
 // Bytes <> Hex
 char* hexstring(unsigned char* bytes, int len); // malloc's

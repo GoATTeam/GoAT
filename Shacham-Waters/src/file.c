@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <relic.h>
+
 #include "file.h"
 #include "utils.h"
 #include "common.h"
@@ -153,7 +155,7 @@ struct file_block_t** read_select_file_blocks(
         block_info->num_sectors = num_sectors;
         block_info->sectors = (struct file_sector_t*)
                 malloc(sizeof(struct file_sector_t) * num_sectors);
-        fseek(fd, index * num_sectors * sector_size, SEEK_SET);
+	fseek(fd, index * num_sectors * sector_size, SEEK_SET);
         
         for (size_t j = 0; j < num_sectors; j++) {
             struct file_sector_t *sector_info = block_info->sectors + j;
@@ -185,30 +187,26 @@ void export_tag(char *file_name, struct file_t* file_info) {
     unsigned char data[1000];
     for (int i = 0; i < file_info->num_blocks; i++) {
         block = file_info->blocks + i;
-        int len = element_to_bytes_compressed(data, block->sigma);
-        fwrite(data, 1, len, fd);
+	g1_write_bin(data, G1_LEN_COMPRESSED, block->sigma, 1);
+        fwrite(data, 1, G1_LEN_COMPRESSED, fd);
     }
     fclose(fd);
 }
 
 void import_tag(char *file_name, struct file_t *file_info) {
+    printf("Reading %s\n", file_name);
     FILE* fd = fopen(file_name, "r");
     if (!fd) {
         printf("Cannot read file, exiting\n");
         exit(1);
     }
 
-    pairing_t pairing;
-    pbc_pairing_init(pairing);
-    int G1_LEN_COMPRESSED = pairing_length_in_bytes_compressed_G1(pairing);
-
     struct file_block_t* block;
-    unsigned char data[G1_LEN_COMPRESSED];
+    unsigned char data[1000];
     for (int i = 0; i < file_info->num_blocks; i++) {
-        block = file_info->blocks + i;
+	block = file_info->blocks + i;
         fread(data, 1, G1_LEN_COMPRESSED, fd);
-        element_init_G1(block->sigma, pairing);
-        element_from_bytes_compressed(block->sigma, data);
+        g1_read_bin(block->sigma, data, G1_LEN_COMPRESSED);
     }
     fclose(fd);
 }
@@ -222,9 +220,6 @@ void import_select_tags(char *file_name,
         exit(1);
     }
 
-    pairing_t pairing;
-    pbc_pairing_init(pairing);
-    int G1_LEN_COMPRESSED = pairing_length_in_bytes_compressed_G1(pairing);
 
     struct file_block_t* block;
     unsigned char data[G1_LEN_COMPRESSED];
@@ -232,8 +227,8 @@ void import_select_tags(char *file_name,
         block = blocks[i];
         fseek(fd, G1_LEN_COMPRESSED * block->index, SEEK_SET);
         fread(data, 1, G1_LEN_COMPRESSED, fd);
-        element_init_G1(block->sigma, pairing);
-        element_from_bytes_compressed(block->sigma, data);
+        g1_new(block->sigma);
+        g1_read_bin(block->sigma, data, G1_LEN_COMPRESSED);
     }
 
     fclose(fd);

@@ -14,74 +14,43 @@ void gen_tag(int block_index,
 {
     struct common_t* params = sk->params;
 
-    element_t hash;
-    element_init_G1(hash, params->pairing);
-    bls_hash_int(block_index, hash, params->pairing); // hash = H(i)
+    uint8_t bytes[1] = {block_index};
 
-    struct file_sector_t *sector1, *sector2, *sector3;
-    mpz_t f_i1, f_i2, f_i3;
-    struct element_s* tag = block->sigma;
-    element_init_G1(tag, params->pairing);
-    element_set(tag, hash);
+    g1_map(block->sigma, bytes, 1); // hash = H(i)
+
+    struct file_sector_t *sector1, *sector2;
+    bn_t f_i1, f_i2;
+    bn_new(f_i1);
+    bn_new(f_i2);
 
     if (block->num_sectors != params->u_size) {
         printf("Critical error in gen_tag\n");
         exit(0);
     }
 
-    element_t acc; // used to accumulate
-    element_init_G1(acc, params->pairing);
-    
-    if (block->num_sectors % 3 != 0) {
+    g1_t acc; // used to accumulate
+    g1_new(acc);
+
+    if (block->num_sectors % 2 != 0) {
         printf("Unimplemented\n");
         exit(0);
     }
-    char *hex = malloc(sizeof(char)*((2*SS)+1));
-    for (int i = 0; i < block->num_sectors; i+=3) {
-        sector1 = block->sectors + i;
-        bytes_to_hex(hex, sector1->data, sector1->sector_size);
-        mpz_init_set_str(f_i1, hex, 16);
+    for (int i = 0; i < block->num_sectors; i+=2) {
+	// printf("Hola sectorid:%d\n", i);
+	sector1 = block->sectors + i;
+        bn_read_bin(f_i1, sector1->data, sector1->sector_size);
 
         sector2 = block->sectors + i + 1;
-        bytes_to_hex(hex, sector2->data, sector2->sector_size);
-        mpz_init_set_str(f_i2, hex, 16);
+        bn_read_bin(f_i2, sector2->data, sector2->sector_size);
 
-        sector3 = block->sectors + i + 2;
-        bytes_to_hex(hex, sector3->data, sector3->sector_size);
-        mpz_init_set_str(f_i3, hex, 16);
-
-        element_pow3_mpz(acc, params->u_vec+i, f_i1, params->u_vec+i+1, f_i2, params->u_vec+i+2, f_i3); // acc = u_i^f_i
-        element_mul(tag, acc, tag); // tag = tag * u_i^f_i
+	g1_mul_sim(acc, params->u_vec[i], f_i1, params->u_vec[i+1], f_i2);
+	g1_add(block->sigma, acc, block->sigma);
     }
-    free(hex);
-
-    element_pow_zn(tag, tag, sk->alpha);
+    g1_mul(block->sigma, block->sigma, sk->alpha);
 }
 
 struct private_key_t *sk;
 struct file_t* file_info;
-
-#define num_threads 20
-#define load (int) ceil (NUM_BLOCKS / (1.0 * num_threads))
-
-void *runner(void *t)
-{
-    int i;
-    long my_id = (long)t;
-
-    printf("thread %ld. About to start work...\n", my_id);
-    int start = my_id * load;
-    int end = (my_id + 1) * load; // NOTE: Assumes N is a multiple of load
-    if (end > NUM_BLOCKS) {
-        end = NUM_BLOCKS;
-    }
-    printf("start:%d end:%d\n", start, end);
-    for (i = start; i < end; i++) {
-        gen_tag(i, file_info->blocks+i, sk);
-    }
-
-    pthread_exit(NULL);
-}
 
 int main() {
     if (access(DEFAULT_DATA_FILE, F_OK) == 0 ) {
@@ -111,21 +80,6 @@ int main() {
 
     // Generate tags now
     printf("Tag computation begins...\n");
-    // pthread_attr_t attr;
-    // pthread_t threads[num_threads];
-
-    // pthread_attr_init(&attr);
-    // pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-
-    // int i;
-    // for (i = 0; i < num_threads; i++) {
-    //     long j = i;
-    //     pthread_create(&threads[i], &attr, runner, (void *)j);
-    // }
-
-    // for (i = 0; i < num_threads; i++) {
-    //     pthread_join(threads[i], NULL);
-    // }
 
     // Serial version
     for (int i = 0; i < NUM_BLOCKS; i++) {

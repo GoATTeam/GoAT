@@ -5,6 +5,14 @@
 #include "utils.h"
 #include "common.h"
 
+void bn_rand_util(bn_t* p) {
+    bn_t n;
+    bn_new(n);
+    g1_get_ord(n);
+    bn_rand_mod(*p, n);
+    bn_free(n);
+}
+
 struct keypair_t* generate_key_pair(int public_params_size)
 {
     printf("generate_key_pair begin\n");
@@ -15,38 +23,29 @@ struct keypair_t* generate_key_pair(int public_params_size)
 
     struct private_key_t* pv_key = (struct private_key_t*)malloc(sizeof(struct private_key_t));
 
-    struct pairing_s *pairing = (struct pairing_s*)malloc(sizeof(pairing_t));
-    pbc_pairing_init(pairing);
+    relic_pairing_init();
+    printf("Relic Initialized successfully\n");
 
     struct common_t *common_params = (struct common_t*) malloc(sizeof(struct common_t));
-    common_params->u_vec = (struct element_s*) malloc (sizeof (struct element_s) * public_params_size);
+    common_params->u_vec = (g1_t*) malloc (sizeof (g1_t) * public_params_size);
     common_params->u_size = public_params_size;
-    common_params->pairing = pairing;
 
     // Set u_i to random
     for (size_t i = 0; i < public_params_size; i++) {
-        element_init_G1(common_params->u_vec + i, pairing);
-        element_random(common_params->u_vec + i);
+        g1_new(common_params->u_vec[i]);
+        g1_rand(common_params->u_vec[i]);
     }
 
     // Set g to random
-    if (pairing_is_symmetric(pairing)) {
-        element_init_G1(common_params->g, pairing);
-    } else {
-        element_init_G2(common_params->g, pairing);
-    }
-    element_random(common_params->g);
+    g2_new(common_params->g);
+    g2_rand(common_params->g);
 
     // Set private key to random
-    element_init_Zr(pv_key->alpha, pairing);
-    element_random(pv_key->alpha);
-
-    if (pairing_is_symmetric(pairing)) {
-        element_init_G1(pub_key->v, pairing);
-    } else {
-        element_init_G2(pub_key->v, pairing);
-    }
-    element_pow_zn(pub_key->v, common_params->g, pv_key->alpha);
+    bn_new(pv_key->alpha);
+    bn_rand_util(& pv_key->alpha);
+    
+    g2_new(pub_key->v) 
+    g2_mul(pub_key->v, common_params->g, pv_key->alpha);
 
     pub_key->params = common_params;
     pv_key->params = common_params;
@@ -62,7 +61,8 @@ struct keypair_t* generate_key_pair(int public_params_size)
 void export_sk(const char* filename, struct private_key_t* sk) {
     FILE* fd = fopen(filename, "w");
     unsigned char data[1000];
-    int len = element_to_bytes(data, sk->alpha);
+    int len = bn_size_bin(sk->alpha);
+    bn_write_bin(data, len, sk->alpha);
     fwrite(data, 1, len, fd);
     fclose(fd);
 }
@@ -75,63 +75,44 @@ void export_pk(const char* filename, struct public_key_t* pk) {
     FILE* fd = fopen(filename, "w");
     unsigned char data[1000];
 
-    int len;
-    len = element_to_bytes_compressed(data, pk->v);
-    assert (len < 1000);
-    fwrite(data, 1, len, fd);
+    g2_write_bin(data, G2_LEN_COMPRESSED, pk->v, 1);
+    fwrite(data, 1, G2_LEN_COMPRESSED, fd);
 
-    len = element_to_bytes_compressed(data, pk->params->g);
-    assert (len < 1000);
-    fwrite(data, 1, len, fd);
+    g2_write_bin(data, G2_LEN_COMPRESSED, pk->params->g, 1);
+    fwrite(data, 1, G2_LEN_COMPRESSED, fd);
 
-    len = element_length_in_bytes_compressed(pk->params->u_vec);
-    assert (len < 1000);
     for (int i = 0; i < pk->params->u_size; i++) {
-        element_to_bytes_compressed(data, pk->params->u_vec + i);
-        fwrite(data, 1, len, fd);
+        g1_write_bin(data, G1_LEN_COMPRESSED, pk->params->u_vec[i], 1);
+        fwrite(data, 1, G1_LEN_COMPRESSED, fd);
     }
 
     fclose(fd);
 }
 
 struct public_key_t* import_pk(const char* filename, int u_vec_size) {
-    struct pairing_s *pairing = (struct pairing_s*)malloc(sizeof(pairing_t));
-    pbc_pairing_init(pairing);
-
     struct public_key_t* pk = (struct public_key_t*)malloc(sizeof(struct public_key_t));
     struct common_t *common_params = (struct common_t*) malloc(sizeof(struct common_t));
-    common_params->u_vec = (struct element_s*) malloc (sizeof (struct element_s) * u_vec_size);
+    common_params->u_vec = (g1_t*) malloc (sizeof (g1_t) * u_vec_size);
     common_params->u_size = u_vec_size;
-    common_params->pairing = pairing;
     pk->params = common_params;
 
-    int G1_LEN_COMPRESSED = pairing_length_in_bytes_compressed_G1(pairing);
-    int G2_LEN_COMPRESSED = pairing_length_in_bytes_compressed_G2(pairing);
     unsigned char data[1000];
 
-    int len = pairing_is_symmetric(pairing) ? G1_LEN_COMPRESSED : G2_LEN_COMPRESSED;
-    if (pairing_is_symmetric(pairing)) {
-        element_init_G1(pk->v, pairing);
-        element_init_G1(pk->params->g, pairing);
-    } else {
-        element_init_G2(pk->v, pairing);
-        element_init_G2(pk->params->g, pairing);
-    }
-    assert (len < 1000);
+    g2_new(pk->v);
+    g2_new(pk->params->g);
 
     FILE* fd = fopen(filename, "r");
-    fread(data, 1, len, fd);
-    element_from_bytes_compressed(pk->v, data);
+    fread(data, 1, G2_LEN_COMPRESSED, fd);
+    g2_read_bin(pk->v, data, G2_LEN_COMPRESSED);
 
-    fread(data, 1, len, fd);
-    element_from_bytes_compressed(pk->params->g, data);
+    fread(data, 1, G2_LEN_COMPRESSED, fd);
+    g2_read_bin(pk->params->g, data, G2_LEN_COMPRESSED);
 
     for (int i = 0; i < pk->params->u_size; i++) {
         fread(data, 1, G1_LEN_COMPRESSED, fd);
-        element_init_G1(pk->params->u_vec + i, pairing);
-        element_from_bytes_compressed(pk->params->u_vec + i, data);
+        g1_new(pk->params->u_vec[i]);
+        g1_read_bin(pk->params->u_vec[i], data, G1_LEN_COMPRESSED);
     }
-
     fclose(fd);
     return pk;
 }
@@ -145,20 +126,19 @@ void free_private_key(struct private_key_t* pk) {
 
 }
 
-/*
-* 11 because 2^33 has 10 digits.
-* 1 extra for the null termination.
-*/
-char int_str[11]; 
-void bls_hash_int(
-    uint32_t value, 
-    struct element_s* output,
-    pairing_t pairing
-) {
-    int len = sprintf(int_str, "%u", value);
-    element_from_hash(output, (void*)int_str, len);
-}
-
+///*
+//* 11 because 2^33 has 10 digits.
+//* 1 extra for the null termination.
+//*/
+//char int_str[11]; 
+//void bls_hash_int(
+//    uint32_t value, 
+//    struct element_s* output,
+//) {
+//    int len = sprintf(int_str, "%u", value);
+//    element_from_hash(output, (void*)int_str, len);
+//}
+//
 
 char* hexstring(unsigned char* bytes, int len)
 {
