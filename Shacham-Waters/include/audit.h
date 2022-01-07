@@ -49,7 +49,8 @@ void generate_query_random(
 void generate_query_deterministic(
     struct query_t* query,
     int num_blocks,
-    unsigned char seed[randombytes_SEEDBYTES]
+    char* seed,
+    int size
 );
 
 // SWPoRet.Prove

@@ -19,21 +19,26 @@ void export_bases(char* filename, g1_t *bases, int size) {
     fclose(fd);
 }
 
-void import_bases(char* filename, struct vc_param_s* vcparams) {
+void import_bases(char* filename, g1_t* bases, int size) {
     FILE* fd = fopen(filename, "r");
+    if (!fd) {
+        printf("%s does not exist, exiting\n", filename);
+        exit(1);
+    }
+
     unsigned char data[1000];
 
-    for (int i = 0; i < vcparams->size; i++) {
+    for (int i = 0; i < size; i++) {
         fread(data, 1, G1_LEN_COMPRESSED, fd);
-        g1_new(vcparams->bases[i]);
-        g1_read_bin(vcparams->bases[i], data, G1_LEN_COMPRESSED);
+        g1_new(bases[i]);
+        g1_read_bin(bases[i], data, G1_LEN_COMPRESSED);
     }
     printf("Import bases finish\n");
     fclose(fd);
 }
 
-void vc_setup(int size) {
-    if (access(DEFAULT_BASES_FILE, F_OK) == 0 ) {
+void vc_setup(char* filename, int size) {
+    if (access(filename, F_OK) == 0 ) {
         printf("Do you want to overwrite previously generated bases? (y/n) ");
         char inp;
         scanf("%c", &inp);
@@ -49,7 +54,7 @@ void vc_setup(int size) {
         g1_rand(bases[i]);
     }
 
-    export_bases(DEFAULT_BASES_FILE, bases, size);
+    export_bases(filename, bases, size);
 
     for (int i=0; i<size; i++) {
         g1_free(bases[i]);
@@ -59,41 +64,49 @@ void vc_setup(int size) {
 struct vc_param_s* init_vc_param() {
     struct vc_param_s* params = (struct vc_param_s*) malloc(sizeof(struct vc_param_s));
     params->size = NUM_SECTORS;
-    // params->precomp = (struct element_pp_s*) malloc(sizeof(struct element_pp_s) * params->size);
     params->bases = (g1_t*) malloc(sizeof(g1_t) * params->size);
 
-    import_bases(DEFAULT_BASES_FILE, params);
+    import_bases(DEFAULT_BASES_FILE, params->bases, params->size);
 
-    // for (int i=0; i<params->size; i++) {
-    //    element_pp_init(params->precomp + i, params->bases + i);
-    // }
+    params->precomp = (g1_t**) malloc(sizeof(g1_t*) * params->size);
+    for (int i = 0; i < params->size; i++) {
+	    params->precomp[i] = (g1_t*) malloc(sizeof(g1_t) * RLC_G1_TABLE);
+    }
+    for (int i = 0; i < params->size; i++) {
+	    for (int j = 0; j < RLC_G1_TABLE; j++) {
+		g1_new(params->precomp[i][j]);	    
+	    }
+	    g1_mul_pre(params->precomp[i], params->bases[i]);
+    }
 
     return params;
 }
 
 void free_vc_param(struct vc_param_s* params) {
-    // free(params->precomp);
-    free(params->bases);
-    free(params);
+	for (int i = 0; i < params->size; i++)
+		free(params->precomp[i]);
+	free(params->precomp);
+    	free(params->bases);
+	free(params);
 }
 
-//void vector_commit_precomputed(
-//    struct element_s* vals, 
-//    struct element_s* output,
-//    struct vc_param_s* params
-//) {
-//    element_t temp;
-//    element_init_same_as(temp, output);
-//    for (int j = 0; j < params->size; j++) { // com = base_1^val_1 x base_2^val_2 x ...
-//        element_pp_pow_zn(temp, vals + j, params->precomp + j);
-//        element_mul(output, output, temp);
-//    }
-//}
-//
+void vector_commit_precomputed(
+    bn_t* vals, 
+    g1_t output,
+    struct vc_param_s* params
+) {
+    g1_t temp;
+    g1_new(temp);
+    for (int j = 0; j < params->size; j++) { // com = base_1^val_1 x base_2^val_2 x ...
+        g1_mul_fix(temp, params->precomp[j], vals[j]);
+        g1_add(output, output, temp);
+    }
+}
+
 //void vector_commit_3x(
-//    struct element_s* bases,
-//    struct element_s* vals,
-//    struct element_s* output,
+//    struct g1_t* bases,
+//    struct g1_t* vals,
+//    struct g1_t* output,
 //    int size
 //) {
 //    element_t temp;
@@ -115,9 +128,9 @@ void free_vc_param(struct vc_param_s* params) {
 //}
 //
 //void vector_commit_3x_2(
-//    struct element_s** bases,
-//    struct element_s* vals,
-//    struct element_s* output,
+//    struct g1_t** bases,
+//    struct g1_t* vals,
+//    struct g1_t* output,
 //    int size
 //) {
 //    element_t temp;

@@ -5,12 +5,46 @@
 #include "utils.h"
 #include "common.h"
 
+void relic_pairing_init() {
+        if (core_init() != RLC_OK) {
+                core_clean();
+        }
+        conf_print();
+
+        if (pc_param_set_any() != RLC_OK) {
+                // RLC_THROW(ERR_NO_CURVE);
+                printf("Exiting\n");
+                core_clean();
+        }
+
+	// Do some checks
+	g1_t p;
+	g1_new(p);
+	int len = g1_size_bin(p, 1);
+	if(len != G1_LEN_COMPRESSED) {
+		printf("set g1_len to %d", len);
+	}
+	g1_free(p);
+	
+	g2_t q;
+	g2_new(q);
+	len = g2_size_bin(q, 1);
+	if(len != G2_LEN_COMPRESSED) {
+		printf("set g2_len to %d", len);
+	}
+	g2_free(q);
+
+	bn_new(N);
+	g1_get_ord(N);
+}
+
+void relic_cleanup() {
+	bn_free(N);
+	core_clean();
+}
+
 void bn_rand_util(bn_t* p) {
-    bn_t n;
-    bn_new(n);
-    g1_get_ord(n);
-    bn_rand_mod(*p, n);
-    bn_free(n);
+    bn_rand_mod(*p, N);
 }
 
 struct keypair_t* generate_key_pair(int public_params_size)
@@ -160,10 +194,11 @@ void bytes_to_hex(char* out, uint8_t* in, int in_len)
 	}
 }
 
-void hex64_to_bytes(char in[64], char val[32]) {
+// in[2*len], val[len]
+void hex_to_bytes(char* in, char* val, int len) {
     const char *pos = in;
 
-    for (size_t count = 0; count < 32; count++) {
+    for (size_t count = 0; count < len; count++) {
         sscanf(pos, "%2hhx", &val[count]);
         pos += 2;
     }
@@ -197,10 +232,10 @@ int run(int ARGC, char* argv[]) {
     return status;
 }
 
-unsigned char* roughtime_get_time(unsigned char* nonce32, char* anchor_name) {
+unsigned char* roughtime_get_time(unsigned char* nonce, char* anchor_name) {
     unsigned char nonce64[64];
     memset(nonce64, 0, 64);
-    memcpy(nonce64, nonce32, 32);
+    memcpy(nonce64, nonce, 32);
 
     unsigned char hex[128 + 1];
     bytes_to_hex(hex, nonce64, 64);

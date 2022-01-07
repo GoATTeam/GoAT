@@ -3,11 +3,11 @@
 #include <relic.h>
 
 // One-time setup to create bases
-void vc_setup(int size);
+void vc_setup(char* filename, int size);
 
 struct vc_param_s {
     g1_t* bases;
-    // g1_t* precomp[RLC_G1_TABLE];
+    g1_t** precomp;
     int size;
 };
 
@@ -15,11 +15,11 @@ struct vc_param_s {
 struct vc_param_s* init_vc_param();
 void free_vc_param(struct vc_param_s* params);
 
-//void vector_commit_precomputed(
-//    struct element_s* vals, 
-//    struct element_s* output,
-//    struct vc_param_s* params
-//);
+void vector_commit_precomputed(
+    bn_t* vals, 
+    g1_t output,
+    struct vc_param_s* params
+);
 //
 //void vector_commit_3x(
 //    struct element_s* bases,

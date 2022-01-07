@@ -3,35 +3,10 @@
 #include "relic.h"
 #include "common.h"
 
-static inline void relic_pairing_init() {
-        if (core_init() != RLC_OK) {
-                core_clean();
-        }
-        conf_print();
+bn_t N;
 
-        if (pc_param_set_any() != RLC_OK) {
-                // RLC_THROW(ERR_NO_CURVE);
-                printf("Exiting\n");
-                core_clean();
-        }
-
-	// Do some checks
-	g1_t p;
-	g1_new(p);
-	int len = g1_size_bin(p, 1);
-	if(len != G1_LEN_COMPRESSED) {
-		printf("set g1_len to %d", len);
-	}
-	g1_free(p);
-	
-	g2_t q;
-	g2_new(q);
-	len = g2_size_bin(q, 1);
-	if(len != G2_LEN_COMPRESSED) {
-		printf("set g2_len to %d", len);
-	}
-	g2_free(q);
-}
+void relic_pairing_init(); 
+void relic_cleanup(); 
 
 /*
 Computes t1-t0 in milliseconds
@@ -73,7 +48,7 @@ void bls_hash_int(uint32_t, ec_t*);
 // Bytes <> Hex
 char* hexstring(unsigned char* bytes, int len); // malloc's
 void bytes_to_hex(char* out, uint8_t* in, int in_len); // assumes already allocated
-void hex64_to_bytes(char in[64], char val[32]);
+void hex_to_bytes(char* in, char* val, int len);
 
 // Import and export of keys
 void export_sk(const char* filename, struct private_key_t* sk);
@@ -83,7 +58,7 @@ struct public_key_t* import_pk(const char* filename, int u_vec_size);
 
 long mod(long a, long b);
 
-unsigned char* roughtime_get_time(unsigned char* nonce32, char* anchor_name);
+unsigned char* roughtime_get_time(unsigned char* nonce, char* anchor_name);
 
 double mean(double data[], int);
 double standard_deviation(double data[], int N);

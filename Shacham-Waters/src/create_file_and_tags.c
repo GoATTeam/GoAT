@@ -90,7 +90,7 @@ int main() {
     export_tag(DEFAULT_TAG_FILE, file_info);
     printf("tag export done\n");
 
-    vc_setup(NUM_SECTORS);
+    vc_setup(DEFAULT_BASES_FILE, NUM_SECTORS);
     printf("vector commitment bases export done\n");
 
     free_file_t(file_info, NUM_BLOCKS, NUM_SECTORS);

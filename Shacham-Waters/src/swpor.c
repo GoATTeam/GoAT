@@ -24,7 +24,7 @@ int main() {
     struct query_t* Q = init_query_t(NUM_CHAL);
     //unsigned char seed[32];
     //hex64_to_bytes("5c9f4bf9b2c15bb815f82faedc5a52fc3cb2dfa83c3ba3cf1b270f31fa0cced2", seed);
-    //generate_query_deterministic(Q, NUM_BLOCKS, seed);
+    //generate_query_deterministic(Q, NUM_BLOCKS, seed, 32);
     generate_query_random(Q, NUM_BLOCKS);
     printf("Query indices generated!\n");
 

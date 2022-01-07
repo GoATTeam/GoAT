@@ -1,3 +1,6 @@
 [submodule "roughenough-geo"]
 	path = deps/roughenough
 	url = git@github.com:mskd12/roughenough.git
+[submodule "deps/relic"]
+	path = deps/relic
+	url = git@github.com:mskd12/relic.git

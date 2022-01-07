@@ -76,23 +76,30 @@ int main(int argc, char** argv) {
     int n_chal = NUM_CHAL;
     printf("(n_anchor_ping:%d, n_por:%d)\n", n_anchor_ping, n_por);
 
-    char buf64[65];
-    buf64[64] = '\0';
-    unsigned char por_comm[n_anchor_ping][32];
+    char buf64[2*POR_COMM_SIZE + 1];
+    unsigned char por_comm[n_anchor_ping][POR_COMM_SIZE];
     unsigned char anchor_sign[n_anchor_ping][32];
     for (int i = 0; i < n_anchor_ping; i++) {
-        fread(buf64, 1, 64, f);
-        // printf("%s\n", buf64);
-        hex64_to_bytes(buf64, por_comm[i]);
+        fread(buf64, 1, 2*POR_COMM_SIZE, f);
+	{
+		buf64[2*POR_COMM_SIZE] = '\0';
+        	printf("%s\n", buf64);
+	}
+        hex_to_bytes(buf64, por_comm[i], POR_COMM_SIZE);
         fread(buf64, 1, 1, f);
 
         fread(buf64, 1, 64, f);
-        // printf("%s\n", buf64);
-        hex64_to_bytes(buf64, anchor_sign[i]);
+	{
+		buf64[64] = '\0';
+		printf("%s\n", buf64);
+	}
+        hex_to_bytes(buf64, anchor_sign[i], 32);
         fread(buf64, 1, 1, f);
     }
     fclose(f);
+    printf("%s reading over\n", cnf.commitment_file);
 
+    relic_pairing_init();
     struct public_key_t* pk = import_pk(DEFAULT_PK_FILE, NUM_SECTORS);
     if (! pk) {
         printf("Error\n");
@@ -100,10 +107,8 @@ int main(int argc, char** argv) {
     }
     printf("Public key read successfully!\n");
 
-    struct pairing_s *pairing = (struct pairing_s*)malloc(sizeof(pairing_t));
-    pbc_pairing_init(pairing);
 
-    struct vc_param_s* params = init_vc_param(pairing);
+    struct vc_param_s* params = init_vc_param();
 
     double t_prove[n_runs];
     double t_verify[n_runs];
@@ -114,30 +119,30 @@ int main(int argc, char** argv) {
         struct timespec t_prove_start, t_prove_end;
         clock_gettime(CLOCK_MONOTONIC_RAW, &t_prove_start);
 
+	struct query_t *Q[n_por];
+	for (int i = 0; i < n_por; i++) {
+	    Q[i] = init_query_t(n_chal);
+	    generate_query_deterministic(Q[i], NUM_BLOCKS, anchor_sign[i], 32);
+	}
+
         // Gen random indices
-        struct element_s* r = (struct element_s*) 
-            malloc(sizeof(struct element_s) * n_por);
-        unsigned int seed1;
-        randombytes_buf_deterministic(&seed1, sizeof (unsigned int), 
-                                    por_comm[n_anchor_ping - 1]);
-        pbc_random_set_deterministic(seed1);
+	rand_init();
+	rand_seed(por_comm[n_anchor_ping - 1], POR_COMM_SIZE);
+        bn_t r[n_por];
         for (int i = 0; i < n_por; i++) {
-            element_init_Zr(r + i, pairing);
-            element_random(r + i);
+            bn_new(r[i]);
+	    bn_rand_util(& r[i]);
         }
 
-        struct query_t *Q[n_por];
-        struct query_t* aggregate_query = init_query_t(
-            n_chal * n_por, 
-            pairing
+	struct query_t* aggregate_query = init_query_t(
+            n_chal * n_por 
         );
         int index = 0;
         for (int i = 0; i < n_por; i++) {
-            Q[i] = init_query_t(n_chal, pairing);
-            generate_query_deterministic(Q[i], NUM_BLOCKS, anchor_sign[i]);
             for (int j = 0; j < Q[i]->query_length; j++, index++) {
                 aggregate_query->indices[index] = Q[i]->indices[j];
-                element_mul(aggregate_query->v + index, Q[i]->v + j, r + i);
+                bn_mul(aggregate_query->v[index], Q[i]->v[j], r[i]);
+		bn_mod(aggregate_query->v[index], aggregate_query->v[index], N);
             }
         }
 
@@ -158,12 +163,11 @@ int main(int argc, char** argv) {
 
         struct query_response_t* R = query_with_selected_blocks(
             aggregate_query, 
-            blocks, 
-            pairing
+            blocks 
         );
 
-        int ps = element_length_in_bytes_compressed(R->sigma) + 
-                 element_length_in_bytes(R->mu_vec) * R->mu_vec_length;
+        int ps = G1_LEN_COMPRESSED + 
+                 (bn_size_str(R->mu_vec[0], 2) / 8) * R->mu_vec_length; // bn_size_str returns number of bits
         // struct element_s* mu_1 = R->mu_vec + 1;
         printf("proof_size:%d bytes (muvec_len:%d)\n", ps, R->mu_vec_length);
 
@@ -190,28 +194,29 @@ int main(int argc, char** argv) {
         clock_gettime(CLOCK_MONOTONIC_RAW, &t_verify_1);
 
         // Verification #2
-        element_t C_lhs;
-        element_init_G1(C_lhs, pairing);
-        element_set1(C_lhs);
+        g1_t C_lhs;
+        g1_new(C_lhs);
+        g1_set_infty(C_lhs);
         vector_commit_precomputed(R->mu_vec, C_lhs, params);
 
         // por_comm[1,...,n_anchor_ping-1]: A total of n_por
-        struct element_s* commitments = malloc(sizeof(struct element_s) * n_por);
+        g1_t commitments[n_por];
         // element_t commitments[n_por];
         for (int i = 0; i < n_por; i++) {
             int j = i+1;
-            element_init_G1(commitments + i, pairing);
-            element_from_bytes_compressed(commitments + i, por_comm[j]);
+	    g1_new(commitments[i]);
+            g1_read_bin(commitments[i], por_comm[j], POR_COMM_SIZE);
+	    // g1_print(commitments[i]);
         }
         if (! cnf.benchmarking)
             printf("commitments imported\n");
 
-        element_t C_rhs;
-        element_init_G1(C_rhs, pairing);
-        element_set1(C_rhs);
-        vector_commit_3x(commitments, r, C_rhs, n_por);
+        g1_t C_rhs;
+        g1_new(C_rhs);
+        g1_set_infty(C_rhs);
+        vector_commit_naive(commitments, r, C_rhs, n_por);
 
-        if (element_cmp(C_lhs, C_rhs) == 0) {
+        if (g1_cmp(C_lhs, C_rhs) == RLC_EQ) {
             printf("Success #2\n");
         } else {
             printf("Fail #2\n");
@@ -228,7 +233,12 @@ int main(int argc, char** argv) {
                 timediff(&t_verify_1, &t_verify_2));
 
         // End
-        free(r);
+        g1_free(C_lhs);
+	g1_free(C_rhs);
+	for (int i = 0; i < n_por; i++) {
+		bn_free(r[i]);
+		g1_free(commitments[i]);
+	}
         free_blocks(blocks, aggregate_query->query_length, NUM_SECTORS);
         free_query_response_t(R);
         free_query_t(aggregate_query);
@@ -246,5 +256,4 @@ int main(int argc, char** argv) {
             standard_deviation(t_prove, n_runs), 
             standard_deviation(t_verify, n_runs));
 
-    free(pairing);
 }

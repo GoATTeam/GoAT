@@ -7,9 +7,9 @@ SODIUM=-lsodium
 THREAD=-lpthread
 PBC=-lpbc
 GMP=-lgmp
-RELIC=../relic-relic-toolkit-0.5.0/build-gmp-bls381/lib/librelic_s.a
+RELIC=../deps/relic/build/lib/librelic_s.a
 
-ALLEXTERNAL=$(SODIUM) $(PBC) $(GMP) $(THREAD) $(MATH)
+ALLEXTERNAL=$(RELIC) $(SODIUM) $(GMP) $(THREAD) $(MATH)
 
 BINARIES=create swpor commit prove_and_verify
 all: $(BINARIES)
@@ -24,7 +24,7 @@ create: create_file_and_tags.o utils.o file.o vector_commit.o
 	$(CC) -o $@ $^ $(RELIC) $(PBC) $(GMP) $(MATH) $(THREAD) $(OTHERFLAGS)
 
 swpor: swpor.o file.o utils.o audit.o vector_commit.o
-	$(CC) -o $@ $^ $(RELIC) $(ALLEXTERNAL) $(OTHERFLAGS)
+	$(CC) -o $@ $^ $(ALLEXTERNAL) $(OTHERFLAGS)
 
 commit: geo_commit.o utils.o audit.o vector_commit.o tlstime.o
 	$(CC) -o $@ $^ $(ALLEXTERNAL) $(OTHERFLAGS)
@@ -39,7 +39,7 @@ proof_clean:
 	rm proofs/*
 
 full_clean: 
-	rm -rf data/* proofs/* $(BINARIES) test_io *.o
+	rm -rf test*.dat data/* proofs/* $(BINARIES) test_io *.o
 
 test: utils.o file.o vector_commit.o
 	$(CC) -c -o test_io.o test/io.c $(CFLAGS) $(OTHERFLAGS)

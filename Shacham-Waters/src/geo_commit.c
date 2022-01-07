@@ -230,20 +230,20 @@ int main(int argc, char** argv) {
         printf("The seed must be 32 bytes and input in hex, e.g., 5c9f4bf9bbc15bb855f82faedc5a52fc3ab2dfa8ec3ba3ce1b270f31fa0cced2\n");
         return 0;
     }
-    struct pairing_s *pairing = (struct pairing_s*)malloc(sizeof(pairing_t));
-    pbc_pairing_init(pairing);
-    struct vc_param_s* vc_params = init_vc_param(pairing);
-    struct response_comm_t* C = init_response_comm_t(NUM_SECTORS, pairing);
-    assert(pairing_length_in_bytes_compressed_G1(pairing) < 32);
-    struct query_t* query = init_query_t(cnf.nops, pairing);
+    relic_pairing_init();
+    struct vc_param_s* vc_params = init_vc_param();
+    struct response_comm_t* C = init_response_comm_t(NUM_SECTORS);
+    struct query_t* query = init_query_t(cnf.nops);
     struct resp responses[cnf.nops];
     init_resp(responses, &cnf);
 
     threaded_swcommit_init(cnf.n_rounds, query, responses, C, vc_params);
 
-    unsigned char por_comm[32];
+    unsigned char client_random[32];
+    unsigned char por_comm[G1_LEN_COMPRESSED];
+    memset(por_comm, 0, G1_LEN_COMPRESSED);
     // Set start to seed for now. In production systems, should be set to random
-    hex64_to_bytes(cnf.seed, por_comm);
+    hex_to_bytes(cnf.seed, por_comm, 32);
 
     // Set the anchor
     unsigned char* (*ping_anchor)(unsigned char*, char*);
@@ -256,10 +256,10 @@ int main(int argc, char** argv) {
     else 
         ping_anchor = NULL;
 
-    unsigned char phase1_buf[64 * (cnf.n_rounds + 1)];
+    unsigned char phase1_buf[(POR_COMM_SIZE + ANCHOR_SIGN_SIZE) * (cnf.n_rounds + 1)];
     unsigned char* ptr = phase1_buf;
     unsigned char* anchor_hash = por_comm;
-    char buf[65];
+    char buf[2*POR_COMM_SIZE + 1]; // assumes POR_COMM_SIZE >= 32
     aio_context_t ioctx;
     struct timespec t_begin_anchor, t_end_anchor, t_begin_file, 
                     t_end_file, t_begin_com, t_end_com;
@@ -274,12 +274,13 @@ int main(int argc, char** argv) {
         // Ping anchor
         clock_gettime(CLOCK_MONOTONIC_RAW, &t_begin_anchor);
         if (ping_anchor) {
-            memcpy(ptr, por_comm, 32);
-            if (cnf.output)
+            memcpy(ptr, por_comm, POR_COMM_SIZE);
+            memcpy(client_random, por_comm, 32);
+	    if (cnf.output)
                 printf("Pinging the anchor now..\n");
-            anchor_hash = ping_anchor(por_comm, cnf.anchor_name);
-            memcpy(ptr+32, anchor_hash, 32);
-            ptr += 64;
+            anchor_hash = ping_anchor(client_random, cnf.anchor_name);
+            memcpy(ptr+POR_COMM_SIZE, anchor_hash, ANCHOR_SIGN_SIZE);
+            ptr += (POR_COMM_SIZE + ANCHOR_SIGN_SIZE);
         }
         clock_gettime(CLOCK_MONOTONIC_RAW, &t_end_anchor);
 
@@ -292,9 +293,10 @@ int main(int argc, char** argv) {
         } else {
             if (cnf.output) {
                 bytes_to_hex(buf, anchor_hash, 32);
+		buf[64] = '\0';
                 printf("[PoR] Deriving from %s\n", buf);
             }
-            generate_query_deterministic(query, cnf.num_blocks, anchor_hash);
+            generate_query_deterministic(query, cnf.num_blocks, anchor_hash, 32);
             if (ping_anchor)
                 free(anchor_hash);
         }
@@ -324,16 +326,19 @@ int main(int argc, char** argv) {
         clock_gettime(CLOCK_MONOTONIC_RAW, &t_end_file);
 
         clock_gettime(CLOCK_MONOTONIC_RAW, &t_begin_com);
-        // swcommit_serial(query, responses, NUM_SECTORS, SS, C, &cnf);
+        // swcommit_serial(query, responses, NUM_SECTORS, SS, C, vc_params, 1);
         threaded_swcommit_run();
         threaded_swcommit_finish();
 
-        if (cnf.output)
-            element_printf("com: %B\n", C->vector_com);
+        memset(por_comm, 0, G1_LEN_COMPRESSED);
+        g1_write_bin(por_comm, G1_LEN_COMPRESSED, C->vector_com, 1);
+        if (cnf.output) {
+		bytes_to_hex(buf, por_comm, POR_COMM_SIZE);
+		buf[2 * POR_COMM_SIZE] = '\0';
+		printf("com: %s\n", buf);
+	}
 
-        memset(por_comm, 0, 32);
-        element_to_bytes_compressed(por_comm, C->vector_com);
-        clock_gettime(CLOCK_MONOTONIC_RAW, &t_end_com);
+	clock_gettime(CLOCK_MONOTONIC_RAW, &t_end_com);
 
         total_a[i] = timediff(&t_begin_anchor, &t_end_anchor);
         total_f[i] = timediff(&t_begin_file, &t_end_file);
@@ -344,9 +349,10 @@ int main(int argc, char** argv) {
     // One last ping
     clock_gettime(CLOCK_MONOTONIC_RAW, &t_begin_anchor);
     if (ping_anchor) {
-        memcpy(ptr, por_comm, 32);
-        anchor_hash = ping_anchor(por_comm, cnf.anchor_name);
-        memcpy(ptr+32, anchor_hash, 32);
+        memcpy(ptr, por_comm, POR_COMM_SIZE);
+	memcpy(client_random, por_comm, 32);
+        anchor_hash = ping_anchor(client_random, cnf.anchor_name);
+        memcpy(ptr+POR_COMM_SIZE, anchor_hash, ANCHOR_SIGN_SIZE);
         free(anchor_hash);
     }
     clock_gettime(CLOCK_MONOTONIC_RAW, &t_end_anchor);
@@ -375,22 +381,21 @@ int main(int argc, char** argv) {
 
     FILE* f = fopen(DEFAULT_P1_OUT, "w");
     ptr = phase1_buf;
-    char buf64[64];
+    char bufhex[2 * POR_COMM_SIZE];
     for (int i=0; i < cnf.n_rounds + 1; i++) {
-        bytes_to_hex(buf64, ptr, 32);
-        fwrite(buf64, 1, 64, f);
+        bytes_to_hex(bufhex, ptr, POR_COMM_SIZE);
+        fwrite(bufhex, 1, 2 * POR_COMM_SIZE, f);
         fwrite("\n", 1, 1, f);
-        ptr += 32;
-        bytes_to_hex(buf64, ptr, 32);
-        fwrite(buf64, 1, 64, f);
+        ptr += POR_COMM_SIZE;
+        bytes_to_hex(bufhex, ptr, ANCHOR_SIGN_SIZE);
+        fwrite(bufhex, 1, 2 * ANCHOR_SIGN_SIZE, f);
         fwrite("\n", 1, 1, f);
-        ptr += 32;
+        ptr += ANCHOR_SIGN_SIZE;
     }
     fclose(f);
     printf("in & out anchor rand written to %s\n", DEFAULT_P1_OUT);
 
     // End...
-    free(pairing);
     io_destroy(ioctx);
     if (cnf.tls_or_roughtime == TLS_1_2_ANCHOR)
         threaded_tls_close();
