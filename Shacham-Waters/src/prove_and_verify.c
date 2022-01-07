@@ -81,18 +81,18 @@ int main(int argc, char** argv) {
     unsigned char anchor_sign[n_anchor_ping][32];
     for (int i = 0; i < n_anchor_ping; i++) {
         fread(buf64, 1, 2*POR_COMM_SIZE, f);
-	{
-		buf64[2*POR_COMM_SIZE] = '\0';
-        	printf("%s\n", buf64);
-	}
+	//{
+	//	buf64[2*POR_COMM_SIZE] = '\0';
+        //	printf("%s\n", buf64);
+	//}
         hex_to_bytes(buf64, por_comm[i], POR_COMM_SIZE);
         fread(buf64, 1, 1, f);
 
         fread(buf64, 1, 64, f);
-	{
-		buf64[64] = '\0';
-		printf("%s\n", buf64);
-	}
+	//{
+	//	buf64[64] = '\0';
+	//	printf("%s\n", buf64);
+	//}
         hex_to_bytes(buf64, anchor_sign[i], 32);
         fread(buf64, 1, 1, f);
     }

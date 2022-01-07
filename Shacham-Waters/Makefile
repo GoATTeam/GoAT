@@ -1,6 +1,6 @@
 CC=gcc
 OTHERFLAGS=-O0
-CFLAGS=-Iinclude/ -I../deps/ccan/ -I../deps/tlse-geo/ -I/usr/local/include/relic/ -I/usr/local/include/relic/low/ -g
+CFLAGS=-Iinclude/ -I../deps/ccan/ -I../deps/tlse-geo/ -I/usr/local/include/relic/ -I/usr/local/include/relic/low/
 HEADERS=include/*
 MATH=-lm
 SODIUM=-lsodium
